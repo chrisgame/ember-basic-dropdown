@@ -31,18 +31,18 @@ export default Component.extend({
 
   // Lifecycle hooks
   init() {
-    console.log('init entered');
+    console.log('init EBD entered');
     this._super(...arguments);
     this._touchMoveHandler = this._touchMoveHandler.bind(this);
     const registerActionsInParent = this.get('registerActionsInParent');
     if (registerActionsInParent) {
       registerActionsInParent(this.get('publicAPI'));
     }
-    console.log('init exited');
+    console.log('init EBD exited');
   },
 
   didInsertElement() {
-    console.log('didInsertElement entered');
+    console.log('didInsertElement EBD entered');
     this._super(...arguments);
     if (this.get('triggerDisabled')) { return; }
     let trigger = this.element.querySelector('.ember-basic-dropdown-trigger');
@@ -66,14 +66,14 @@ export default Component.extend({
     if (onMouseLeave) {
       trigger.addEventListener('mouseleave', e => onMouseLeave(this.get('publicAPI'), e));
     }
-    console.log('didInsertElement exited');
+    console.log('didInsertElement EBD exited');
   },
 
   willDestroyElement() {
-    console.log('willDestroyElement entered');
+    console.log('willDestroyElement EBD entered');
     this._super(...arguments);
     this.get('appRoot').removeEventListener('touchmove', this._touchMoveHandler);
-    console.log('willDestroyElement exited');
+    console.log('willDestroyElement EBD exited');
   },
 
   // Events
@@ -204,9 +204,15 @@ export default Component.extend({
 
   _performReposition() {
     console.log('_performReposition scheduled with run entered');
-    if (!this.get('publicAPI.isOpen')) { return; }
+    if (!this.get('publicAPI.isOpen')) {
+      console.log('_performReposition scheduled with run exited');
+      return;
+    }
     let dropdown = self.document.getElementById(this.get('dropdownId'));
-    if (!dropdown) { return ;}
+    if (!dropdown) {
+      console.log('_performReposition scheduled with run exited');
+      return ;
+    }
     let {
       triggerTop, triggerLeft, triggerWidth, triggerHeight, // trigger dimensions
       dropdownHeight, dropdownWidth,                        // dropdown dimensions
@@ -221,6 +227,7 @@ export default Component.extend({
         let viewportRight = scrollLeft + self.window.innerWidth;
         hPosition = triggerLeft + dropdownWidth > viewportRight ? 'right' : 'left';
       }
+      console.log('_performReposition scheduled with run exited');
       return this.set('_horizontalPositionClass', `ember-basic-dropdown--${hPosition}`);
     } else {
       if (['right', 'left'].indexOf(hPosition) === -1) {
