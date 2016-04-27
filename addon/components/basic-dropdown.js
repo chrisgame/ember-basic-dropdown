@@ -31,15 +31,18 @@ export default Component.extend({
 
   // Lifecycle hooks
   init() {
+    console.log('init entered');
     this._super(...arguments);
     this._touchMoveHandler = this._touchMoveHandler.bind(this);
     const registerActionsInParent = this.get('registerActionsInParent');
     if (registerActionsInParent) {
       registerActionsInParent(this.get('publicAPI'));
     }
+    console.log('init exited');
   },
 
   didInsertElement() {
+    console.log('didInsertElement entered');
     this._super(...arguments);
     if (this.get('triggerDisabled')) { return; }
     let trigger = this.element.querySelector('.ember-basic-dropdown-trigger');
@@ -63,11 +66,14 @@ export default Component.extend({
     if (onMouseLeave) {
       trigger.addEventListener('mouseleave', e => onMouseLeave(this.get('publicAPI'), e));
     }
+    console.log('didInsertElement exited');
   },
 
   willDestroyElement() {
+    console.log('willDestroyElement entered');
     this._super(...arguments);
     this.get('appRoot').removeEventListener('touchmove', this._touchMoveHandler);
+    console.log('willDestroyElement exited');
   },
 
   // Events
@@ -197,6 +203,7 @@ export default Component.extend({
   },
 
   _performReposition() {
+    console.log('_performReposition scheduled with run entered');
     if (!this.get('publicAPI.isOpen')) { return; }
     let dropdown = self.document.getElementById(this.get('dropdownId'));
     if (!dropdown) { return ;}
@@ -255,6 +262,7 @@ export default Component.extend({
     dropdown.style.width = `${dropdownWidth}px`;
     dropdown.style.top = `${dropdownTop}px`;
     dropdown.style.left = `${dropdownLeft}px`;
+    console.log('_performReposition scheduled with run exited');
   },
 
   _getPositionInfo(dropdown) {
